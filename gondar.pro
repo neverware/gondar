@@ -39,5 +39,5 @@ win32 {
   LIBS += -lsetupapi -lole32 -lgdi32 -lwininet -lshlwapi -lcrypt32 -lwintrust -lcomdlg32 -luuid
 
   # Needed for static linking
-  LIBS += -lqwindows -lQt5PlatformSupport
+  LIBS += -lqwindows
 }
