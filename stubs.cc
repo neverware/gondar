@@ -16,3 +16,7 @@ void Install(DeviceGuy * target_device, char * image_path) {
   Q_UNUSED(target_device);
   Q_UNUSED(image_path);
 }
+
+BOOL IsCurrentProcessElevated() {
+  return true;
+}

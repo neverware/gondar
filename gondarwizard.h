@@ -38,6 +38,31 @@ public:
 
 };
 
+class AdminCheckPage : public QWizardPage
+{
+    Q_OBJECT
+
+public:
+    AdminCheckPage(QWidget *parent = 0);
+
+protected:
+    void initializePage() override;
+    bool isComplete() const;
+
+public slots:
+    void getIsAdmin();
+    void showIsAdmin();
+    void showIsNotAdmin();
+signals:
+    void isAdminRequested();
+    void isAdminReady();
+    void isNotAdminReady();
+private:
+    QLabel *label;
+    QTimer *tim;
+    bool is_admin;
+};
+
 class IntroPage : public QWizardPage
 {
     Q_OBJECT

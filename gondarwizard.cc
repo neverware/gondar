@@ -26,10 +26,65 @@ GondarButton::GondarButton(const QString & text,
 GondarWizard::GondarWizard(QWidget *parent)
     : QWizard(parent)
 {
+    addPage(new AdminCheckPage);
     addPage(new IntroPage);
     addPage(new ConclusionPage);
     addPage(new KewlPage);
     setWindowTitle(tr("Cloudready USB Creation Utility"));
+}
+
+AdminCheckPage::AdminCheckPage(QWidget *parent)
+    : QWizardPage(parent)
+{
+    setTitle(tr("Insert USB Drive"));
+    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
+
+    label = new QLabel("Please wait...");
+    is_admin = false; // assume false until we discover otherwise.
+                      // this holds the user at this screen
+
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(label);
+    setLayout(layout);
+
+    // the next button is grayed out if user does not have appropriate rights
+    QObject::connect(this, SIGNAL(isAdminRequested()),
+                     this, SLOT(getIsAdmin()));
+    QObject::connect(this, SIGNAL(isAdminReady()),
+                     this, SLOT(showIsAdmin()));
+    QObject::connect(this, SIGNAL(isNotAdminReady()),
+                     this, SLOT(showIsNotAdmin()));
+}
+
+void AdminCheckPage::initializePage() {
+    tim = new QTimer(this);
+    connect(tim, SIGNAL(timeout()), SLOT(getIsAdmin()));
+    emit isAdminRequested();
+}
+
+bool AdminCheckPage::isComplete() const {
+    return is_admin;
+}
+
+void AdminCheckPage::getIsAdmin() {
+    qDebug() << "kendall: getIsAdmin fires";
+    is_admin = IsCurrentProcessElevated();
+    if (!is_admin) {
+        emit isNotAdminReady(); 
+        tim->stop();
+    } else {
+        tim->stop();
+        emit isAdminReady();
+    }
+}
+
+void AdminCheckPage::showIsAdmin() {
+    label->setText("User has admin rights.");
+    emit completeChanged();
+}
+
+void AdminCheckPage::showIsNotAdmin() {
+    label->setText("User does not have admin rights.");
 }
 
 IntroPage::IntroPage(QWidget *parent)
@@ -151,7 +206,7 @@ KewlPage::KewlPage(QWidget *parent)
 {
     setTitle(tr("Writing to disk will like, totally wipe your drive, dude."));
     QObject::connect(this, SIGNAL(WriteDriveRequested()),
-                     this, SLOT(WriteDrive()));
+                     this, SLOT(WriteToDrive()));
 }
 
 void KewlPage::initializePage()
