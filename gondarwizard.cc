@@ -38,7 +38,6 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Insert USB Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
     label = new QLabel("Please wait...");
     is_admin = false; // assume false until we discover otherwise.
