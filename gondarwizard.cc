@@ -38,7 +38,6 @@ AdminCheckPage::AdminCheckPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Insert USB Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
     label = new QLabel("Please wait...");
     is_admin = false; // assume false until we discover otherwise.
@@ -136,7 +135,6 @@ UsbInsertPage::UsbInsertPage(QWidget *parent)
     : QWizardPage(parent)
 {
     setTitle(tr("Insert USB Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
     label = new QLabel("Please insert the destination USB drive to create a "
                         "USB Cloudready(tm) bootable USB drive.");;
@@ -197,7 +195,6 @@ DeviceSelectPage::DeviceSelectPage(QWidget *parent)
     // this page should just say 'hi how are you' while it stealthily loads
     // the usb device list.  or it could ask you to insert your device
     setTitle(tr("Select Drive"));
-    setPixmap(QWizard::WatermarkPixmap, QPixmap(":/images/frogmariachis.png"));
 
 }
 

@@ -14,7 +14,6 @@ SOURCES       = gondarwizard.cc \
                 deviceguy.cc \
                 neverware_unzipper.c \
                 minizip/minishared.c
-RESOURCES     = gondarwizard.qrc
 
 INCLUDEPATH += minizip
 
