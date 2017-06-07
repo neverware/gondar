@@ -1,0 +1,5 @@
+all:
+	$(MAKE) -f Makefile.linux && ./package.py
+
+
+.PHONY: all
