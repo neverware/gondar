@@ -1,6 +1,6 @@
 QT = core network widgets
 
-CONFIG += console static
+CONFIG += static
 
 HEADERS       = src/admin_check_page.h \
                 src/deviceguy.h \
