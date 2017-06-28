@@ -28,10 +28,14 @@
 
 #include "minishared.h"
 
+// TODO(nicholasbishop): this file has been minimally converted from C
+// to C++, so there are a lot of cleanups we can do (especially in the
+// string operations)
+
 const int FILENAME_BUFFER_SIZE = 256;
 
 static void get_filename_inside_zip(char* zipfile, char* filename) {
-  unzFile* uf = unzOpen64(zipfile);
+  unzFile* uf = static_cast<unzFile*>(unzOpen64(zipfile));
   if (uf == NULL) {
     printf("error opening unzip file\n");
     return;
@@ -43,7 +47,7 @@ static void get_filename_inside_zip(char* zipfile, char* filename) {
     unzCloseCurrentFile(uf);
     return;
   }
-  unz_file_info64 file_info = {0};
+  unz_file_info64 file_info = {};
   err = unzGetCurrentFileInfo64(uf, &file_info, filename, FILENAME_BUFFER_SIZE,
                                 NULL, 0, NULL, 0);
   if (err != UNZ_OK) {
@@ -56,7 +60,7 @@ static int miniunz_extract_currentfile(unzFile uf,
                                        int opt_extract_without_path,
                                        int* popt_overwrite,
                                        const char* password) {
-  unz_file_info64 file_info = {0};
+  unz_file_info64 file_info = {};
   FILE* fout = NULL;
   void* buf = NULL;
   uint16_t size_buf = 8192;
@@ -206,7 +210,7 @@ static int miniunz_extract_all(unzFile uf,
 static char* filename_from_url(const char* url) {
   // TODO(kendall): i sure hope this string is null-terminated
   // TODO(kendall): clean up this memory somewhere
-  char* urlcpy = malloc(strlen(url));
+  char* urlcpy = static_cast<char*>(malloc(strlen(url)));
   strcpy(urlcpy, url);
   char* tok = strtok(urlcpy, "/");
   char* filename;
@@ -244,7 +248,7 @@ char* neverware_unzip(const char* url) {
   if (ret != 0) {
     return NULL;
   }
-  char* filename = calloc(FILENAME_BUFFER_SIZE, 0);
+  char* filename = static_cast<char*>(calloc(FILENAME_BUFFER_SIZE, 0));
   get_filename_inside_zip(zipfilename, filename);
   return filename;
 }

@@ -1,6 +1,6 @@
 QT = core network widgets
 
-CONFIG += console static
+CONFIG += static
 
 HEADERS       = src/admin_check_page.h \
                 src/deviceguy.h \
@@ -20,7 +20,7 @@ SOURCES       = minizip/minishared.c \
                 src/gondarwizard.cc \
                 src/image_select_page.cc \
                 src/main.cc \
-                src/neverware_unzipper.c \
+                src/neverware_unzipper.cc \
                 src/unzipthread.cc
 RESOURCES     = gondarwizard.qrc
 
@@ -59,6 +59,7 @@ INSTALLS += target
 
 TEMPLATE = app
 TARGET = gondar
+
 
 win32 {
   LIBS += -Lbuild/minizip-mxe
