@@ -11,6 +11,7 @@ WORKDIR /opt/gondar
 ADD src /opt/gondar/src/
 ADD *.pro *.qrc *.rc /opt/gondar/
 ADD images /opt/gondar/images
+ADD windows_resources /opt/gondar/windows_resources
 
 RUN /opt/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5 gondar.pro
 RUN make -j4 release
