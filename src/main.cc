@@ -4,7 +4,7 @@
 #include <QtPlugin>
 
 #include "gondarwizard.h"
-#include "plog/Log.h"
+#include "log.h"
 
 int main(int argc, char* argv[]) {
 #if defined(Q_OS_WIN)
@@ -12,10 +12,14 @@ int main(int argc, char* argv[]) {
 #endif
   Q_INIT_RESOURCE(gondarwizard);
 
-  plog::init(plog::debug, "log1.txt");
+  gondar::InitializeLogging();
 
   QApplication app(argc, argv);
   GondarWizard wizard;
   wizard.show();
-  return app.exec();
+
+  const auto ret = app.exec();
+  LOG_INFO << "app.exec() returned " << ret;
+
+  return ret;
 }
