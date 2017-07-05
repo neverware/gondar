@@ -10,7 +10,7 @@ HEADERS       = src/admin_check_page.h \
                 src/gondar.h \
                 src/gondarwizard.h \
                 src/image_select_page.h \
-				src/log.h \
+                src/log.h \
                 src/neverware_unzipper.h \
                 src/shared.h \
                 src/unzipthread.h
@@ -21,7 +21,7 @@ SOURCES       = minizip/minishared.c \
                 src/downloader.cc \
                 src/gondarwizard.cc \
                 src/image_select_page.cc \
-				src/log.cc \
+                src/log.cc \
                 src/main.cc \
                 src/neverware_unzipper.cc \
                 src/unzipthread.cc
