@@ -10,6 +10,7 @@ HEADERS       = src/admin_check_page.h \
                 src/gondar.h \
                 src/gondarwizard.h \
                 src/image_select_page.h \
+                src/log.h \
                 src/neverware_unzipper.h \
                 src/shared.h \
                 src/unzipthread.h
@@ -20,12 +21,13 @@ SOURCES       = minizip/minishared.c \
                 src/downloader.cc \
                 src/gondarwizard.cc \
                 src/image_select_page.cc \
+                src/log.cc \
                 src/main.cc \
                 src/neverware_unzipper.cc \
                 src/unzipthread.cc
 RESOURCES     = gondarwizard.qrc
 
-INCLUDEPATH += minizip
+INCLUDEPATH += minizip plog/include
 
 win32 {
   RC_FILE       = gondar.rc
@@ -43,6 +45,10 @@ win32 {
 
 *g++* {
   QMAKE_CXXFLAGS += -Wextra -Wmissing-declarations -std=c++11 -Wsuggest-override
+
+  # Treat plog as a system header so that it doesn't cause compiler warnings
+  QMAKE_CXXFLAGS += -isystem ../plog/include
+  QMAKE_CXXFLAGS += -isystem plog/include
 
   # Mark Qt headers in the MXE build as system headers. Without this
   # the above compiler warning options apply to Qt headers, which can

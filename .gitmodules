@@ -1,3 +1,6 @@
 [submodule "minizip"]
 	path = minizip
 	url = https://github.com/nmoinvaz/minizip
+[submodule "plog"]
+	path = plog
+	url = git@github.com:SergiusTheBest/plog.git

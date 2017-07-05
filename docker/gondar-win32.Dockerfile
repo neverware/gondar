@@ -8,6 +8,7 @@ RUN /opt/mxe/usr/bin/i686-w64-mingw32.static-cmake ../../minizip
 RUN make
 
 WORKDIR /opt/gondar
+ADD plog /opt/gondar/plog
 ADD src /opt/gondar/src/
 ADD *.pro *.qrc *.rc /opt/gondar/
 ADD images /opt/gondar/images
