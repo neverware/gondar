@@ -4,3 +4,5 @@
 *.lz4
 *.raw
 *.zip
+*.o
+*.cpp
