@@ -5,10 +5,10 @@ RELEASE ?= false
 TREAT_WARNINGS_AS_ERRORS ?= false
 
 # Some distros use different names for clang-format
-ifneq (, $(shell which clang-format))
-    CLANG_FORMAT ?= clang-format
-else
+ifneq (, $(shell which clang-format-4.0 2> /dev/null))
     CLANG_FORMAT ?= clang-format-4.0
+else
+    CLANG_FORMAT ?= clang-format
 endif
 
 # Release mode vs normal debug mode
