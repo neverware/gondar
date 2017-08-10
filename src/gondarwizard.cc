@@ -232,7 +232,14 @@ bool DeviceSelectPage::validatePage() {
     return false;
   } else {
     unsigned int selected_index = selected->index;
-    wizard()->writeOperationPage.setDevice(drivelist.at(selected_index));
+    // FIXME(kendall): The previous implementation allowed for a lookup of
+    // the selected USB's device index.  With the new implementation that
+    // lookup has been removed.  In practice, it could be that devices always
+    // start at 130.  This is the case on my machine.  I suggest we either
+    // verify this or add back in the device id mapping.
+    uint64_t deviceStart = 130;
+    wizard()->writeOperationPage.setDevice(
+        drivelist.at(selected_index - deviceStart));
     return true;
   }
 }
