@@ -90,5 +90,5 @@ QUrl ImageSelectPage::getUrl() {
 
 void ImageSelectPage::handleNewestImageUrlError() {
   hasError = true;
-  wizard()->postError("An error has occurred fetching the latest image");
+  wizard()->postError("No network connection detected. Please connect to a network in order to retrieve the site image.");
 }
