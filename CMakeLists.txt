@@ -141,9 +141,13 @@ target_link_libraries(cloudready-usb-maker app)
 
 # Test application
 add_executable(tests test/test.cc)
+add_executable(bigtests test/bigtest.cc)
 target_include_directories(tests PRIVATE .)
+target_include_directories(bigtests PRIVATE .)
 target_link_libraries(tests Qt5::Test app)
+target_link_libraries(bigtests Qt5::Test app)
 set_target_properties(tests PROPERTIES AUTOMOC ON)
+set_target_properties(bigtests PROPERTIES AUTOMOC ON)
 
 # Platform-specific build configuration
 if(WIN32)

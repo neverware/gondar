@@ -23,6 +23,7 @@
 #include <QString>
 #include <QWizard>
 
+#include "device_picker.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
 #include "usb_insert_page.h"
@@ -40,8 +41,11 @@ class GondarWizard : public QWizard {
 
  public:
   GondarWizard(QWidget* parent = 0);
+  GondarWizard(gondar::DevicePicker* picker_in,
+               QWidget* parent = 0);
 
   ~GondarWizard();
+  void init();
 
   int nextId() const override;
   void postError(const QString& error);

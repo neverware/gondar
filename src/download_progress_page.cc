@@ -55,6 +55,8 @@ void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
+  // TODO: maybe subclass the network manager to supply our stub file located
+  // at the path we give for outputFileInfo()
   unzipThread = new UnzipThread(manager.outputFileInfo(), this);
   connect(unzipThread, &UnzipThread::finished, this,
           &DownloadProgressPage::onUnzipFinished);

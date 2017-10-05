@@ -114,5 +114,6 @@ QNetworkReply* DownloadManager::getCurrentDownload() {
 }
 
 QFileInfo DownloadManager::outputFileInfo() const {
+  LOG_WARNING << "~~~RETURNING " << output.fileName();
   return QFileInfo(output.fileName());
 }
