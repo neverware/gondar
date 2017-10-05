@@ -21,23 +21,6 @@
 
 namespace gondar {
 
-class DevicePicker::Button : public QRadioButton {
- public:
-  Button(const DeviceGuy& device, QWidget* parent)
-      : QRadioButton(QString::fromStdString(device.name), parent),
-        device_(device) {
-    if (device.num_bytes < 6 * gondar::getGigabyte()) {
-      setEnabled(false);
-      setText(QString::fromStdString(device.name) + " (too small)");
-    }
-  }
-
-  const DeviceGuy& device() const { return device_; }
-
- private:
-  DeviceGuy device_;
-};
-
 DevicePicker::DevicePicker() {
   setLayout(&layout_);
 

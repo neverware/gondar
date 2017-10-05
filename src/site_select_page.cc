@@ -58,7 +58,7 @@ bool SiteSelectPage::validatePage() {
   } else {
     const auto site = selected->site();
     QList<GondarImage> imageList = site.getImages();
-    wizard()->imageSelectPage.addImages(imageList);
+    wizard()->imageSelectPage->addImages(imageList);
     return true;
   }
 }

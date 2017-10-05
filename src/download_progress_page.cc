@@ -18,6 +18,11 @@
 
 DownloadProgressPage::DownloadProgressPage(QWidget* parent)
     : WizardPage(parent) {
+  manager = new DownloadManager();
+  init();
+}
+
+void DownloadProgressPage::init() {
   setTitle("CloudReady Download");
   setSubTitle("Your installer image is currently downloading.");
   download_finished = false;
@@ -28,17 +33,17 @@ DownloadProgressPage::DownloadProgressPage(QWidget* parent)
 
 void DownloadProgressPage::initializePage() {
   setLayout(&layout);
-  const QUrl url = wizard()->imageSelectPage.getUrl();
+  const QUrl url = wizard()->imageSelectPage->getUrl();
   qDebug() << "using url= " << url;
-  connect(&manager, &DownloadManager::finished, this,
+  connect(manager, &DownloadManager::finished, this,
           &DownloadProgressPage::markComplete);
-  manager.append(url.toString());
-  connect(&manager, &DownloadManager::started, this,
+  manager->append(url.toString());
+  connect(manager, &DownloadManager::started, this,
           &DownloadProgressPage::onDownloadStarted);
 }
 
 void DownloadProgressPage::onDownloadStarted() {
-  QNetworkReply* cur_download = manager.getCurrentDownload();
+  QNetworkReply* cur_download = manager->getCurrentDownload();
   connect(cur_download, &QNetworkReply::downloadProgress, this,
           &DownloadProgressPage::downloadProgress);
 }
@@ -51,11 +56,15 @@ void DownloadProgressPage::downloadProgress(qint64 sofar, qint64 total) {
   progress.setValue(sofar);
 }
 
+UnzipThread* DownloadProgressPage::makeUnzipThread() {
+  return new UnzipThread(manager->outputFileInfo(), this);
+}
+
 void DownloadProgressPage::markComplete() {
   download_finished = true;
   // now that the download is finished, let's unzip the build.
   notifyUnzip();
-  unzipThread = new UnzipThread(manager.outputFileInfo(), this);
+  unzipThread = makeUnzipThread();
   connect(unzipThread, &UnzipThread::finished, this,
           &DownloadProgressPage::onUnzipFinished);
   unzipThread->start();

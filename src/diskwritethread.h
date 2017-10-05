@@ -41,7 +41,7 @@ class DiskWriteThread : public QThread {
   State state() const;
 
  protected:
-  void run() override;
+  virtual void run() override;
 
  private:
   void setState(State state);

@@ -29,11 +29,13 @@
 
 class GondarWizard::Private {
  public:
+  Private();
+  Private(gondar::DevicePicker* picker_in);
   gondar::UpdateCheck updateCheck;
   gondar::AboutDialog aboutDialog;
 
   AdminCheckPage adminCheckPage;
-  DeviceSelectPage deviceSelectPage;
+  std::unique_ptr<DeviceSelectPage> deviceSelectPage;
   ChromeoverLoginPage chromeoverLoginPage;
   SiteSelectPage siteSelectPage;
   ErrorPage errorPage;
@@ -43,10 +45,40 @@ class GondarWizard::Private {
   QDateTime runTime;
 };
 
+GondarWizard::Private::Private() {
+  deviceSelectPage.reset(new DeviceSelectPage());
+}
+GondarWizard::Private::Private(gondar::DevicePicker* picker_in) {
+  deviceSelectPage.reset(new DeviceSelectPage(picker_in));
+}
+
 GondarWizard::GondarWizard(QWidget* parent)
     : QWizard(parent),
       p_(new Private()),
       about_shortcut_(QKeySequence::HelpContents, this) {
+  init();
+  downloadProgressPage = new DownloadProgressPage();
+  writeOperationPage = new WriteOperationPage();
+  imageSelectPage = new ImageSelectPage();
+}
+
+GondarWizard::GondarWizard(gondar::DevicePicker* picker_in,
+                           DownloadProgressPage* downloadProgressIn,
+                           WriteOperationPage* writeOpIn,
+                           ImageSelectPage* imageSelectIn,
+                           QWidget* parent)
+    : QWizard(parent),
+      p_(new Private(picker_in)),
+      about_shortcut_(QKeySequence::HelpContents, this) {
+  downloadProgressPage = downloadProgressIn;
+  writeOperationPage = writeOpIn;
+  imageSelectPage = imageSelectIn;
+  init();
+}
+
+GondarWizard::~GondarWizard() {}
+
+void GondarWizard::init() {
   // these pages are automatically cleaned up
   // new instances are made whenever navigation moves on to another page
   // according to qt docs
@@ -55,11 +87,11 @@ GondarWizard::GondarWizard(QWidget* parent)
   // that both progress to usbInsertPage
   setPage(Page_chromeoverLogin, &p_->chromeoverLoginPage);
   setPage(Page_siteSelect, &p_->siteSelectPage);
-  setPage(Page_imageSelect, &imageSelectPage);
+  setPage(Page_imageSelect, imageSelectPage);
   setPage(Page_usbInsert, &usbInsertPage);
-  setPage(Page_deviceSelect, &p_->deviceSelectPage);
-  setPage(Page_downloadProgress, &downloadProgressPage);
-  setPage(Page_writeOperation, &writeOperationPage);
+  setPage(Page_deviceSelect, p_->deviceSelectPage.get());
+  setPage(Page_downloadProgress, downloadProgressPage);
+  setPage(Page_writeOperation, writeOperationPage);
   setPage(Page_error, &p_->errorPage);
   setWizardStyle(QWizard::ModernStyle);
   setWindowTitle(tr("CloudReady USB Maker"));
@@ -80,8 +112,6 @@ GondarWizard::GondarWizard(QWidget* parent)
 
   p_->updateCheck.start(this);
 }
-
-GondarWizard::~GondarWizard() {}
 
 void GondarWizard::setNormalLayout() {
   QList<QWizard::WizardButton> button_layout;

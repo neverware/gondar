@@ -46,12 +46,19 @@ bool WriteOperationPage::validatePage() {
   return writeFinished;
 }
 
+DiskWriteThread* WriteOperationPage::makeDiskWriteThread(
+    DeviceGuy* drive_in,
+    const QString& image_path_in,
+    QObject* parent) {
+  return new DiskWriteThread(drive_in, image_path_in, parent);
+}
+
 void WriteOperationPage::writeToDrive() {
   LOG_INFO << "Writing to drive...";
   image_path.clear();
-  image_path.append(wizard()->downloadProgressPage.getImageFileName());
+  image_path.append(wizard()->downloadProgressPage->getImageFileName());
   showProgress();
-  diskWriteThread = new DiskWriteThread(&device, image_path, this);
+  diskWriteThread = makeDiskWriteThread(&device, image_path, this);
   connect(diskWriteThread, &DiskWriteThread::finished, this,
           &WriteOperationPage::onDoneWriting);
   LOG_INFO << "launching thread...";

@@ -16,6 +16,8 @@
 #ifndef IMAGE_SELECT_PAGE_H
 #define IMAGE_SELECT_PAGE_H
 
+#include <memory>
+
 #include <QButtonGroup>
 #include <QLabel>
 #include <QRadioButton>
@@ -33,6 +35,8 @@ class ImageSelectPage : public gondar::WizardPage {
 
  public:
   ImageSelectPage(QWidget* parent = 0);
+  ImageSelectPage(NewestImageUrl * newestIn, QWidget* parent = 0);
+  void init();
   QUrl getUrl() const;
   int nextId() const override;
   void addImage(GondarImage image);
@@ -51,7 +55,7 @@ class ImageSelectPage : public gondar::WizardPage {
   QRadioButton sixtyFour;
   QLabel sixtyFourDetails;
   QVBoxLayout layout;
-  NewestImageUrl newestImageUrl;
+  std::unique_ptr<NewestImageUrl> newestImageUrl;
   bool hasError;
 };
 

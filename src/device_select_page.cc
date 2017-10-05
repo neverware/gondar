@@ -18,39 +18,49 @@
 #include "gondarwizard.h"
 #include "log.h"
 
-DeviceSelectPage::DeviceSelectPage(QWidget* parent) : WizardPage(parent) {
+DeviceSelectPage::DeviceSelectPage(QWidget* parent)
+    : WizardPage(parent), picker(new gondar::DevicePicker()) {
   // this page should just say 'hi how are you' while it stealthily loads
   // the usb device list.  or it could ask you to insert your device
+  init();
+}
+
+DeviceSelectPage::DeviceSelectPage(gondar::DevicePicker* picker_in,
+                                   QWidget* parent)
+    : WizardPage(parent) {
+  picker.reset(picker_in);
+  init();
+}
+
+void DeviceSelectPage::init() {
   setTitle("USB device selection");
   setSubTitle("Choose your target USB device from the list of devices below.");
   drivesLabel.setText("Select Drive:");
-
   layout.addWidget(&drivesLabel);
-  layout.addWidget(&picker);
+  layout.addWidget(picker.get());
   setLayout(&layout);
-
-  connect(&picker, &gondar::DevicePicker::selectionChanged, this,
+  connect(picker.get(), &gondar::DevicePicker::selectionChanged, this,
           &DeviceSelectPage::completeChanged);
 }
 
 void DeviceSelectPage::initializePage() {
-  picker.refresh(wizard()->usbInsertPage.devices());
+  picker->refresh(wizard()->usbInsertPage.devices());
 }
 
 bool DeviceSelectPage::validatePage() {
-  if (const auto device = picker.selectedDevice()) {
-    wizard()->writeOperationPage.setDevice(*device);
+  if (const auto device = picker->selectedDevice()) {
+    wizard()->writeOperationPage->setDevice(*device);
     return true;
   }
   return false;
 }
 
 bool DeviceSelectPage::isComplete() const {
-  return picker.selectedDevice() != gondar::nullopt;
+  return picker->selectedDevice() != gondar::nullopt;
 }
 
 int DeviceSelectPage::nextId() const {
-  if (wizard()->downloadProgressPage.isComplete()) {
+  if (wizard()->downloadProgressPage->isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
     return GondarWizard::Page_downloadProgress;

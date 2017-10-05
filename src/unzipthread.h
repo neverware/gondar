@@ -24,12 +24,10 @@ class UnzipThread : public QThread {
  public:
   UnzipThread(const QFileInfo& inputFile, QObject* parent = 0);
   ~UnzipThread();
-  const QString& getFileName() const;
+  virtual const QString& getFileName() const;
 
  protected:
-  void run() override;
-
- private:
+  virtual void run() override;
   QFileInfo inputFile;
   QString filename;
 };

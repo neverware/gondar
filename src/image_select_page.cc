@@ -31,6 +31,17 @@ class DownloadButton : public QRadioButton {
 };
 
 ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
+  newestImageUrl.reset(new NewestImageUrl());
+  init();
+}
+
+ImageSelectPage::ImageSelectPage(NewestImageUrl * newIn, QWidget* parent)
+    : WizardPage(parent) {
+  newestImageUrl.reset(newIn);
+  init();
+}
+
+void ImageSelectPage::init() {
   setTitle("Which version of CloudReady do you need?");
   setSubTitle(" ");
 
@@ -55,7 +66,7 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
   }
 
   setLayout(&layout);
-  connect(&newestImageUrl, &NewestImageUrl::errorOccurred, this,
+  connect(newestImageUrl.get(), &NewestImageUrl::errorOccurred, this,
           &ImageSelectPage::handleNewestImageUrlError);
   hasError = false;
 }
@@ -63,7 +74,7 @@ ImageSelectPage::ImageSelectPage(QWidget* parent) : WizardPage(parent) {
 void ImageSelectPage::initializePage() {
   if (!gondar::isChromeover()) {
     // for beerover, we'll have to check what the latest release is
-    newestImageUrl.fetch();
+    newestImageUrl->fetch();
   }
 }
 
@@ -80,7 +91,7 @@ bool ImageSelectPage::validatePage() {
   }
   if (!gondar::isChromeover()) {
     // in the beerover case, we need to have retrieved the latest image url
-    return newestImageUrl.isReady();
+    return newestImageUrl->isReady();
   }
   return true;
 }
@@ -129,12 +140,12 @@ QUrl ImageSelectPage::getUrl() {
   } else {
     // for beerover, we had to wait on a url lookup and we consult newestImage
     if (selected == &thirtyTwo) {
-      return newestImageUrl.get32Url();
+      return newestImageUrl->get32Url();
     } else if (selected == &sixtyFour) {
-      return newestImageUrl.get64Url();
+      return newestImageUrl->get64Url();
     } else {
       // TODO: decide what this behavior should be
-      return newestImageUrl.get64Url();
+      return newestImageUrl->get64Url();
     }
   }
 }

@@ -17,6 +17,7 @@
 #define TEST_TEST_H_
 
 #include <QObject>
+#include <QWidget>
 
 #include <QtTest/QtTest>
 
@@ -27,6 +28,7 @@ class Test : public QObject {
 
  private slots:
   void testDevicePicker();
+  void testLinuxStubFlow();
 };
 }
 

@@ -63,7 +63,7 @@ int ChromeoverLoginPage::nextId() const {
     // if there are multiple sites, we'll set the urls on the site select page
     return GondarWizard::Page_siteSelect;
   } else {
-    wizard()->imageSelectPage.addImages(siteList[0].getImages());
+    wizard()->imageSelectPage->addImages(siteList[0].getImages());
     return GondarWizard::Page_imageSelect;
   }
 }

@@ -38,6 +38,9 @@ class WriteOperationPage : public gondar::WizardPage {
   bool validatePage() override;
   void showProgress();
   int nextId() const override;
+  virtual DiskWriteThread* makeDiskWriteThread(DeviceGuy* drive_in,
+                                               const QString& image_path_in,
+                                               QObject* parent);
  public slots:
   void onDoneWriting();
 

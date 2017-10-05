@@ -23,6 +23,7 @@
 #include <QString>
 #include <QWizard>
 
+#include "device_picker.h"
 #include "download_progress_page.h"
 #include "image_select_page.h"
 #include "usb_insert_page.h"
@@ -40,9 +41,13 @@ class GondarWizard : public QWizard {
 
  public:
   GondarWizard(QWidget* parent = 0);
-
+  GondarWizard(gondar::DevicePicker* picker_in,
+               DownloadProgressPage* downloadProgressIn,
+               WriteOperationPage* writeOpIn,
+               ImageSelectPage* imageSelectIn,
+               QWidget* parent = 0);
   ~GondarWizard();
-
+  void init();
   int nextId() const override;
   void postError(const QString& error);
   qint64 getRunTime();
@@ -52,10 +57,10 @@ class GondarWizard : public QWizard {
   // some data types and convoluted for others.  In this case, a later page
   // makes a decision based on a radio button seleciton in an earlier page,
   // so putting the shared state in the wizard seems more straightforward
-  ImageSelectPage imageSelectPage;
-  DownloadProgressPage downloadProgressPage;
+  ImageSelectPage* imageSelectPage;
+  DownloadProgressPage* downloadProgressPage;
   UsbInsertPage usbInsertPage;
-  WriteOperationPage writeOperationPage;
+  WriteOperationPage* writeOperationPage;
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);
