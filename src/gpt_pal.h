@@ -22,5 +22,6 @@
 // This function is kept in a separate file to avoid an issue with pragmas
 // within gdisk affecting rufus-based functionality (getting disk extents)
 bool clearMbrGpt(const char* physical_path);
+bool makeEmptyPartition(const char* physical_path);
 
 #endif

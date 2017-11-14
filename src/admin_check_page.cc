@@ -26,6 +26,8 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
                      // this holds the user at this screen
 
   layout.addWidget(&label);
+  layout.addStretch();
+  layout.addWidget(&warpTunnel);
   setLayout(&layout);
   // TODO: move isChromevoer() out of AdminCheckPage and call these metrics
   // from a more intuitive context
@@ -34,6 +36,11 @@ AdminCheckPage::AdminCheckPage(QWidget* parent) : WizardPage(parent) {
   } else {
     gondar::SendMetric(gondar::Metric::BeeroverUse);
   }
+}
+
+void AdminCheckPage::handleFormatOnly() {
+  wizard()->setFormatOnly(true);
+  wizard()->next();
 }
 
 void AdminCheckPage::initializePage() {
@@ -60,6 +67,12 @@ void AdminCheckPage::showIsAdmin() {
       "<p>You will need:</p><ul><li>8GB or 16GB USB stick</li><li>20 minutes "
       "for USB installer creation</li></ul></p>");
   label.setWordWrap(true);
+  warpTunnel.setText(
+      "<a href=\"reformat\">Done with your USB installer?  Format it "
+      "here.</a>");
+  warpTunnel.setTextFormat(Qt::RichText);
+  connect(&warpTunnel, &QLabel::linkActivated, this,
+          &AdminCheckPage::handleFormatOnly);
   emit completeChanged();
 }
 
@@ -72,6 +85,9 @@ void AdminCheckPage::showIsNotAdmin() {
 }
 
 int AdminCheckPage::nextId() const {
+  if (wizard()->isFormatOnly()) {
+    return GondarWizard::Page_usbInsert;
+  }
   if (gondar::isChromeover()) {
     return GondarWizard::Page_chromeoverLogin;
   } else {

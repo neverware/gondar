@@ -62,6 +62,8 @@ class GondarWizard : public QWizard {
 
   const std::vector<GondarSite>& sites() const;
   void setSites(const std::vector<GondarSite>& sites);
+  bool isFormatOnly() const { return formatOnly; }
+  void setFormatOnly(bool newValue) { formatOnly = newValue; }
 
   // this enum determines page order
   enum {
@@ -90,6 +92,7 @@ class GondarWizard : public QWizard {
   void setNormalLayout();
 
   QShortcut about_shortcut_;
+  bool formatOnly;
 };
 
 #endif /* GONDARWIZARD */

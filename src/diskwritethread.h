@@ -25,6 +25,9 @@
 class DiskWriteThread : public QThread {
   Q_OBJECT
  public:
+  // a constructor used to reformat the disk.  it requires no image path string
+  DiskWriteThread(DeviceGuy* drive_in, QObject* parent = 0);
+  // a constructor used to write the specified image to disk
   DiskWriteThread(DeviceGuy* drive_in,
                   const QString& image_path_in,
                   QObject* parent = 0);
@@ -45,6 +48,8 @@ class DiskWriteThread : public QThread {
 
  private:
   void setState(State state);
+  void writeImage();
+  void formatDrive();
 
   mutable QMutex state_mutex_;
   State state_ = State::Initial;

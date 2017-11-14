@@ -27,6 +27,7 @@ class AdminCheckPage : public gondar::WizardPage {
  public:
   AdminCheckPage(QWidget* parent = 0);
   int nextId() const override;
+  void handleFormatOnly();
 
  protected:
   void initializePage() override;
@@ -36,6 +37,8 @@ class AdminCheckPage : public gondar::WizardPage {
 
  private:
   QLabel label;
+  // offer the users a way to format their disk
+  QLabel warpTunnel;
   bool is_admin;
   QVBoxLayout layout;
 };

@@ -25,6 +25,7 @@ DeviceGuyList GetDeviceList();
 bool Install(DeviceGuy* target_device,
              const char* image_path,
              int64_t image_size);
+bool Format(DeviceGuy* target_device);
 bool IsCurrentProcessElevated();
 
 #endif

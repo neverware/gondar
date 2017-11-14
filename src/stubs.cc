@@ -35,6 +35,11 @@ bool Install(DeviceGuy* target_device,
   return true;
 }
 
+bool Format(DeviceGuy* target_device) {
+  Q_UNUSED(target_device);
+  return true;
+}
+
 bool IsCurrentProcessElevated() {
   return true;
 }

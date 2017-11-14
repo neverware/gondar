@@ -18,11 +18,13 @@
 // We use gdisk to clean up the GPT such that Windows is happy writing to
 // the disk
 #include "../gdisk/gpt.h"
+#include "../gdisk/parttypes.h"
 
 class PalData : public GPTData {
  public:
   PalData();
   WhichToUse UseWhichPartitions(void) override;
+  void ClearDisk();
 };
 
 PalData::PalData() : GPTData() {}
@@ -31,6 +33,19 @@ WhichToUse PalData::UseWhichPartitions(void) {
   // The disk may be in a weird state, but we are about to reformat it.
   // Just always use a new partition table.
   return use_new;
+}
+
+void PalData::ClearDisk() {
+  int newPartNum = 1;
+  uint64_t low = FindFirstInLargest();
+  Align(&low);
+  uint64_t high = FindLastInFree(low);
+  uint64_t startSector = low;
+  uint64_t endSector = high;
+  CreatePartition(newPartNum, startSector, endSector);
+  partitions[0].SetType(0x0b00);  // make it fat32
+  // arg is 'quiet'
+  SaveGPTData(true);
 }
 
 bool clearMbrGpt(const char* physical_path) {
@@ -46,5 +61,22 @@ bool clearMbrGpt(const char* physical_path) {
     return false;
   } else {
     return true;
+  }
+}
+
+bool makeEmptyPartition(const char* physical_path) {
+  char* newPartInfo;
+  PalData gptdata;
+  gptdata.LoadPartitions(std::string(physical_path));
+  gptdata.ClearDisk();
+  return true;
+
+  int problems = gptdata.Verify();
+  free(newPartInfo);
+  // TODO: unclear if we care about problems in this regard
+  if (problems > 0) {
+    return true;
+  } else {
+    return false;
   }
 }

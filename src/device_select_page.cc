@@ -56,6 +56,9 @@ bool DeviceSelectPage::isComplete() const {
 }
 
 int DeviceSelectPage::nextId() const {
+  if (wizard()->isFormatOnly()) {
+    return GondarWizard::Page_writeOperation;
+  }
   if (wizard()->downloadProgressPage.isComplete()) {
     return GondarWizard::Page_writeOperation;
   } else {
