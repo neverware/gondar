@@ -43,6 +43,7 @@ int main(int argc, char* argv[]) {
 
   GondarWizard wizard;
   wizard.show();
+  breakstuff
 
   const auto ret = app.exec();
   LOG_INFO << "app.exec() returned " << ret;
