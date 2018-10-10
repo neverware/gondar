@@ -1,0 +1,14 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - make build-gondar
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+      - build/cloudready-usb-maker.exe
+  discard-paths: yes

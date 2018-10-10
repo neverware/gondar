@@ -4,6 +4,7 @@ RUN dnf install -y \
 	cmake \
 	gcc \
 	gcc-c++ \
+	git \
 	make \
 	qt5-qtbase-devel \
 	which \
