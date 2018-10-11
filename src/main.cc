@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
   // placed here to enable logging for this step
   SetFormatPromptHook();
 #endif
+  dontcompile
   QApplication app(argc, argv);
   app.setStyleSheet(gondar::readUtf8File(":/style.css"));
 
