@@ -4,11 +4,9 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - make build-gondar
+      - git submodule update --init
+      - CHROMEOVER=false make jenkins
+      - CHROMEOVER=true make jenkins
   post_build:
     commands:
       - echo Build completed on `date`
-artifacts:
-  files:
-      - build/cloudready-usb-maker.exe
-  discard-paths: yes

@@ -8,10 +8,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - echo `which python`
       - git submodule update --init
-      - docker build -t gondar-win --file docker/gondar-win32.Dockerfile .
-      - docker tag gondar-win $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/gondar-win
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/gondar-win
+      - make jenkins
   post_build:
     commands:
       - echo Build completed on `date`
+artifacts:
+  files:
+      - package/build/cloudready-usb-maker.exe
+  discard-paths: yes

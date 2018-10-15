@@ -8,10 +8,13 @@ phases:
   build:
     commands:
       - echo Build started on `date`
+      - echo `which python`
       - git submodule update --init
-      - docker build -t gondar-linux --file docker/gondar-linux.Dockerfile .
-      - docker tag gondar-linux $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/gondar-linux
-      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/gondar-linux
+      - make jenkins PACKAGE_FLAGS="--chromeover"
   post_build:
     commands:
       - echo Build completed on `date`
+artifacts:
+  files:
+      - package/build/cloudready-usb-maker.exe
+  discard-paths: yes

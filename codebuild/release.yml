@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - export KEWLTEST=$(aws ssm get-parameters --region us-east-1 --names unkewl --with-decryption --query Parameters[0].Value)
+      - echo kewltest is $KEWLTEST
+  build:
+    commands:
+      - echo Build started on `date`
+      - python package.py
+  post_build:
+    commands:
+      - echo Build completed on `date`
+artifacts:
+  files:
+      - build/cloudready-usb-maker.exe
+  discard-paths: yes
